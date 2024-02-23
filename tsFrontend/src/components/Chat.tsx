@@ -6,22 +6,18 @@ const Chat = () => {
     const [myMsg, setMymsg] = useState('');
     const [myUsers, setmyUsers] = useState([]);
     const [mySocket, setmySocket] = useState<WebSocket | null>(null);
-    const [chats, setchats] = useState<{ message: string, from: string }[] | null>(null);
+    const [chats, setchats] = useState<{ message: string, from: string }[]>([]);
     const pNumber = localStorage.getItem('phoneNumber');
     useEffect(() => {
         const pNumber = localStorage.getItem('phoneNumber');
         const socket = new WebSocket(`ws://localhost:3003?phoneNumber=${pNumber}`);
-        setmySocket(socket);
-        console.log("Socket", socket);
-        socket.addEventListener('message', (event) => {
-            console.log("myNumber", pNumber);
-            console.log("Selected Number", myNumber);
-            const response = JSON.parse(event.data);
-            console.log("response", response, "--", myNumber);
+        socket.addEventListener('message', async (event) => {
+            const response = await JSON.parse(event.data);
             if (response?.from === myNumber) {
-                setchats([...chats!, { message: response?.message, from: myNumber }])
+                setchats(prevChats => [...prevChats, { message: response.message, from: myNumber }]);
             }
-        })
+        });
+        setmySocket(socket);
     }, [])
     useEffect(() => {
         const getdata = async () => {
@@ -56,6 +52,7 @@ const Chat = () => {
             console.log("in my socket");
             mySocket.send(again);
         }
+        setMymsg('');
     }
     const handleChat = async (value: string) => {
         try {
