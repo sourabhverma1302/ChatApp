@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Chat = () => {
-    const [myNumber, setMyNumber] = useState("");
+    let myNumber = "";
     const [myMsg, setMyMsg] = useState("");
     const [myUsers, setMyUsers] = useState([]);
     const [mySocket, setMySocket] = useState<WebSocket | null>(null);
@@ -12,7 +12,6 @@ const Chat = () => {
     useEffect(() => {
         const socket = new WebSocket(`ws://localhost:3003?phoneNumber=${pNumber}`);
         setMySocket(socket);
-
         socket.addEventListener('message', (event) => {
             const response = JSON.parse(event.data);
             if (response?.from === myNumber) {
@@ -23,7 +22,7 @@ const Chat = () => {
         return () => {
             socket.close(); // Close the WebSocket connection on component unmount
         };
-    }, [myNumber, pNumber]);
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,10 +61,8 @@ const Chat = () => {
     };
 
     const handleChat = async (value: string) => {
-        if (value !== myNumber) {
-            setMyNumber(value);
-        }
-
+        myNumber = value;
+        console.log("my", myNumber);
         try {
             const res = await axios.get(`http://localhost:3003/getChats?to=${value}&from=${pNumber}`);
             setChats(res.data?.messages || []);
