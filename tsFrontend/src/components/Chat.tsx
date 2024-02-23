@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const Chat = () => {
-    const [myNumber, setMyPhone] = useState('');
-    const [myMsg, setMymsg] = useState('');
+    const [myNumber, setMyPhone] = useState("");
+    const [myMsg, setMymsg] = useState("");
     const [myUsers, setmyUsers] = useState([]);
     const [mySocket, setmySocket] = useState<WebSocket | null>(null);
     const [chats, setchats] = useState<{ message: string, from: string }[] | null>(null);
@@ -11,7 +11,6 @@ const Chat = () => {
     useEffect(() => {
         const pNumber = localStorage.getItem('phoneNumber');
         const socket = new WebSocket(`ws://localhost:3003?phoneNumber=${pNumber}`);
-        setmySocket(socket);
         console.log("Socket", socket);
         socket.addEventListener('message', (event) => {
             console.log("myNumber", pNumber);
@@ -21,7 +20,7 @@ const Chat = () => {
             if (response?.from === myNumber) {
                 setchats([...chats!, { message: response?.message, from: myNumber }])
             }
-        })
+        });setmySocket(socket);
     }, [])
     useEffect(() => {
         const getdata = async () => {
@@ -31,9 +30,6 @@ const Chat = () => {
         }
         getdata();
     }, []);
-    useEffect(() => {
-
-    }, [])
 
     const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -46,30 +42,29 @@ const Chat = () => {
         }
         const again = JSON.stringify(newMessage);
         console.log("chats", chats);
+        if (mySocket) {
+            console.log("in my socket");
+            mySocket.send(again);
+        }
         if (chats?.length) {
             setchats([...chats!, { message: newMessage?.message, from: pNumber! }])
         }
         else {
             setchats([{ message: newMessage?.message, from: pNumber! }])
         }
-        if (mySocket) {
-            console.log("in my socket");
-            mySocket.send(again);
-        }
     }
     const handleChat = async (value: string) => {
+        setMyPhone(value);
+        console.log("myNumber", pNumber);
+            console.log("Selected Number", myNumber);
         try {
-            console.log("numbers", value, pNumber);
-            const data = await axios.get(`http://localhost:3003/getChats?to=${value}&from=${pNumber}`)
-            if (data) {
-                console.log("data", data);
-                if (data?.data?.allChats?.length) {
-                    setchats(data?.data?.allChats?.[0]?.messages);
-                }
-                else {
-                    setchats([]);
-                }
+            console.log("numbers", myNumber, pNumber);
+            const res = await axios.get(`http://localhost:3003/getChats?to=${value}&from=${pNumber}`)
+            console.log(res.data);
+            if(res.data){
+                setchats(res.data.messages);
             }
+            else{setchats([]);}
         } catch (error) {
             console.log("error", error);
         }
@@ -80,13 +75,16 @@ const Chat = () => {
                 {
                     myUsers?.map((users: { name: string, _id: string, phoneNumber: string }) => {
                         return (
-                            <ul role="list" className="divide-y divide-gray-100" key={users?._id} >
+                            <ul role="list" className="divide-y divide-gray-100" key={users._id}>
                                 <li className="flex justify-between gap-x-6 py-5">
-                                    <button className="flex min-w-0 gap-x-4" onClick={(e) => { e.preventDefault(); setMyPhone(users?.phoneNumber); console.log("number", myNumber); handleChat(users?.phoneNumber) }}>
+                                    <button className="flex min-w-0 gap-x-4" onClick={(e) => { 
+                                        e.preventDefault();   
+                                        handleChat(users.phoneNumber) }}>
                                         <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                                         <div className="min-w-0 flex-auto">
                                             <p className="text-sm font-semibold leading-6 text-gray-900">{users?.name}</p>
                                             <p className="mt-1 truncate text-xs leading-5 text-gray-500">{users?.phoneNumber}</p>
+                                            {pNumber==users.phoneNumber&&<p>YOU</p>}
                                         </div>
                                     </button>
                                 </li>

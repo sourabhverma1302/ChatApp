@@ -10,12 +10,12 @@ export const getChats = async (req: Request, res: Response) => {
         }
         var allChats;
         if (to < from) {
-            allChats = await chats.find({ number1: to, number2: from });
+            allChats = await chats.findOne({ number1: to, number2: from });
         }
         else if (to > from) {
-            allChats = await chats.find({ number1: from, number2: to });
+            allChats = await chats.findOne({ number1: from, number2: to });
         }
-        return res.status(200).json({ message: 'chat found', allChats });
+        return res.status(200).json(allChats );
     } catch (error) {
         return res.status(301).json({ message: 'not chat found' });
     }

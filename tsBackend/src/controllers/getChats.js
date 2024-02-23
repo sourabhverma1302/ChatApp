@@ -23,12 +23,12 @@ const getChats = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         var allChats;
         if (to < from) {
-            allChats = yield chatSchema_1.default.find({ number1: to, number2: from });
+            allChats = yield chatSchema_1.default.findOne({ number1: to, number2: from });
         }
         else if (to > from) {
-            allChats = yield chatSchema_1.default.find({ number1: from, number2: to });
+            allChats = yield chatSchema_1.default.findOne({ number1: from, number2: to });
         }
-        return res.status(200).json({ message: 'chat found', allChats });
+        return res.status(200).json(allChats);
     }
     catch (error) {
         return res.status(301).json({ message: 'not chat found' });
