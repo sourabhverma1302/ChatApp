@@ -1,9 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import z from 'zod';
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const signUpSchema = z.object({
         name: z.string(),
         email: z.string().email("Please provide valid email"),
@@ -26,6 +28,7 @@ const SignUp = () => {
             const res = await axios.post('https://chatapp-3.onrender.com/signUp', dd);
             console.log("data", res.data);
             localStorage.setItem('phoneNumber', data.phoneNumber);
+            navigate('/chat')
         } catch (error) {
             console.log("error", error);
         }

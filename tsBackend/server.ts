@@ -11,7 +11,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://65d9a65224fc2ac4564099c5--tangerine-travesseiro-1f2b4e.netlify.app'],
     credentials: true
 }
 app.use(cors(corsOptions));
