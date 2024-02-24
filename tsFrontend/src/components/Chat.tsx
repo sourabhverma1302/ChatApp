@@ -11,7 +11,7 @@ const Chat = () => {
     console.log("re-render");
 
     useEffect(() => {
-        const socket = new WebSocket(`wss://chatapp-3.onrender.com?phoneNumber=${pNumber}`);
+        const socket = new WebSocket(`wss://chatapp-1-31e7.onrender.com?phoneNumber=${pNumber}`);
         socket.onopen = () => {
             socket.addEventListener('message', (event) => {
                 const response = JSON.parse(event.data);
@@ -31,7 +31,7 @@ const Chat = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://chatapp-3.onrender.com/allUsers');
+                const res = await axios.get('https://chatapp-1-31e7.onrender.com/allUsers');
                 setMyUsers(res?.data?.allUsers || []);
             } catch (error) {
                 console.log("Error fetching users:", error);
@@ -44,7 +44,7 @@ const Chat = () => {
         console.log(myNumber.current);
         if (myNumber.current != "" && pNumber != "") {
             try {
-                const res = await axios.get(`https://chatapp-3.onrender.com/getChats?to=${myNumber.current}&from=${pNumber}`);
+                const res = await axios.get(`https://chatapp-1-31e7.onrender.com/getChats?to=${myNumber.current}&from=${pNumber}`);
 
                 setChats(res.data?.messages || []);
             } catch (error) {
