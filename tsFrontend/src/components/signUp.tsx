@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
 
@@ -24,7 +23,7 @@ const SignUp = () => {
             password: data.password
         };
         try {
-            const res = await axios.post('http://localhost:3003/signUp', dd);
+            const res = await axios.post('https://chatapp-3.onrender.com/signUp', dd);
             console.log("data", res.data);
             localStorage.setItem('phoneNumber', data.phoneNumber);
         } catch (error) {

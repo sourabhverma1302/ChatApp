@@ -20,7 +20,7 @@ const Login = () => {
             email: data.email,
             password: data.password
         };
-        await axios.post('http://localhost:3003/login', newdata)
+        await axios.post('https://chatapp-3.onrender.com/login', newdata)
             .then((res) => {
                 console.log("res", res);
                 localStorage.setItem('phoneNumber', res?.data?.checkUser?.phoneNumber);
