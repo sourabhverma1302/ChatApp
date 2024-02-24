@@ -25,7 +25,7 @@ const SignUp = () => {
             password: data.password
         };
         try {
-            const res = await axios.post('https://chatapp-1-31e7.onrender.com/signUp', dd);
+            const res = await axios.post('https://chatapp-mzoh.onrender.com/signUp', dd);
             console.log("data", res.data);
             localStorage.setItem('phoneNumber', data.phoneNumber);
             navigate('/chat')

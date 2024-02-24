@@ -11,7 +11,7 @@ const Chat = () => {
     const [isChatVisible, setIsChatVisible] = useState(false);// To track if chat is visible
 
     useEffect(() => {
-        const socket = new WebSocket(`wss://chatapp-3.onrender.com?phoneNumber=${pNumber}`);
+        const socket = new WebSocket(`wss://chatapp-mzoh.onrender.com?phoneNumber=${pNumber}`);
         socket.onopen = () => {
             socket.addEventListener('message', (event) => {
                 const response = JSON.parse(event.data);
@@ -31,7 +31,7 @@ const Chat = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('https://chatapp-3.onrender.com/allUsers');
+                const res = await axios.get('https://chatapp-mzoh.onrender.com/allUsers');
                 setMyUsers(res?.data?.allUsers || []);
             } catch (error) {
                 console.log("Error fetching users:", error);
@@ -44,7 +44,7 @@ const Chat = () => {
         console.log(myNumber.current);
         if (phoneNumber !== "" && pNumber !== "") {
             try {
-                const res = await axios.get(`https://chatapp-3.onrender.com/getChats?to=${phoneNumber}&from=${pNumber}`);
+                const res = await axios.get(`https://chatapp-mzoh.onrender.com/getChats?to=${phoneNumber}&from=${pNumber}`);
                 setChats(res.data?.messages || []);
                 setIsChatVisible(true); // Show chat after fetching chats
             } catch (error) {
