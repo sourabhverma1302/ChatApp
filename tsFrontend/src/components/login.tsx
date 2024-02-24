@@ -30,7 +30,7 @@ const Login = () => {
     }
     return (
 
-        <div className="flex min-h-full flex-col justify-center h-[730px] w-[100%]" style={{ backgroundColor: '#111827' }}>
+        <div className="flex min-h-full flex-col justify-center h-[730px] w-[100%] p-10" style={{ backgroundColor: '#111827' }}>
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">Sign In to your account</h2>
             </div>
